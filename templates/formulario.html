@@ -1,33 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Disponibilidad</title>
+    <title>Formulario de Disponibilidad - Autoescuela</title>
     <style>
-        body { font-family: Arial; margin: 30px; }
-        h2 { color: #333; }
-        label { font-weight: bold; }
-        .day-group { margin-bottom: 20px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f3;
+            padding: 50px;
+        }
+        .container {
+            max-width: 600px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .dia-section {
+            margin-bottom: 15px;
+        }
+        .hora-checkbox {
+            margin-right: 10px;
+        }
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
     </style>
 </head>
 <body>
-    <h2>Indica tu disponibilidad semanal</h2>
-    <form method="POST">
-        <label>Nombre:</label><br>
-        <input type="text" name="nombre" required><br><br>
+    <div class="container">
+        <h1>Tu Disponibilidad</h1>
+        <form method="POST" action="/">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
 
-        <label>Teléfono:</label><br>
-        <input type="text" name="telefono" required><br><br>
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required pattern="[0-9]{9,15}" title="Introduce un número válido">
 
-        {% for dia in dias %}
-            <div class="day-group">
-                <label>{{ dia }}:</label><br>
-                {% for hora in horas %}
-                    <input type="checkbox" name="{{ dia }}" value="{{ hora }}"> {{ hora }}
-                {% endfor %}
-            </div>
-        {% endfor %}
+            {% for dia, horas in horas_por_dia.items() %}
+                <div class="dia-section">
+                    <label>{{ dia }}:</label>
+                    {% for hora in horas %}
+                        <input type="checkbox" class="hora-checkbox" name="disponibilidad_{{ dia }}" value="{{ hora }}">
+                        {{ hora }}
+                    {% endfor %}
+                </div>
+            {% endfor %}
 
-        <button type="submit">Enviar</button>
-    </form>
+            <button type="submit">Enviar Disponibilidad</button>
+        </form>
+    </div>
 </body>
 </html>
