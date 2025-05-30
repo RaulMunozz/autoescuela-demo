@@ -73,7 +73,7 @@
     {% for dia in dias %}
       <label>{{ dia }}</label>
       <div class="horas">
-        {% for hora in horas %}
+        {% for hora in ['08:00','09:00','10:00','11:00','12:00','13:00','16:00','17:00','18:00','19:00'] %}
           <label><input type="checkbox" name="disponibilidad_{{ dia }}" value="{{ hora }}"> {{ hora }}</label>
         {% endfor %}
       </div>
