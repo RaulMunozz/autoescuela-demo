@@ -1,39 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Formulario de Disponibilidad</title>
+    <title>Disponibilidad</title>
+    <style>
+        body { font-family: Arial; margin: 30px; }
+        h2 { color: #333; }
+        label { font-weight: bold; }
+        .day-group { margin-bottom: 20px; }
+    </style>
 </head>
 <body>
-    <h2>Indica tu disponibilidad</h2>
+    <h2>Indica tu disponibilidad semanal</h2>
     <form method="POST">
-        Nombre:<br>
+        <label>Nombre:</label><br>
         <input type="text" name="nombre" required><br><br>
 
-        Teléfono:<br>
+        <label>Teléfono:</label><br>
         <input type="text" name="telefono" required><br><br>
 
-        Día:<br>
-        <select name="dia" required>
-            <option value="">--Selecciona un día--</option>
-            <option value="Lunes">Lunes</option>
-            <option value="Martes">Martes</option>
-            <option value="Miércoles">Miércoles</option>
-            <option value="Jueves">Jueves</option>
-            <option value="Viernes">Viernes</option>
-        </select><br><br>
-
-        Horas disponibles:<br>
-        <select name="horas" multiple required>
-            <option value="09:00">09:00</option>
-            <option value="10:00">10:00</option>
-            <option value="11:00">11:00</option>
-            <option value="12:00">12:00</option>
-            <option value="13:00">13:00</option>
-            <option value="16:00">16:00</option>
-            <option value="17:00">17:00</option>
-            <option value="18:00">18:00</option>
-            <option value="19:00">19:00</option>
-        </select><br><br>
+        {% for dia in dias %}
+            <div class="day-group">
+                <label>{{ dia }}:</label><br>
+                {% for hora in horas %}
+                    <input type="checkbox" name="{{ dia }}" value="{{ hora }}"> {{ hora }}
+                {% endfor %}
+            </div>
+        {% endfor %}
 
         <button type="submit">Enviar</button>
     </form>
