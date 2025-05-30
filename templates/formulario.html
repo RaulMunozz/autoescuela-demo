@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Formulario de Disponibilidad</title>
 </head>
 <body>
+    <h2>Indica tu disponibilidad semanal</h2>
+    <form method="POST">
+        Nombre:<br>
+        <input type="text" name="nombre" required><br><br>
 
+        Día:<br>
+        <select name="dia" required>
+            <option value="Lunes">Lunes</option>
+            <option value="Martes">Martes</option>
+            <option value="Miércoles">Miércoles</option>
+            <option value="Jueves">Jueves</option>
+            <option value="Viernes">Viernes</option>
+        </select><br><br>
+
+        Hora:<br>
+        <select name="hora" required>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+            <option value="11:00">11:00</option>
+            <option value="12:00">12:00</option>
+            <option value="13:00">13:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+            <option value="18:00">18:00</option>
+            <option value="19:00">19:00</option>
+        </select><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
 </body>
 </html>
