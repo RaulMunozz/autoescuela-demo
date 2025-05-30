@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 import json
+# Cambio mínimo para forzar commit
 
 
 app = Flask(__name__)
