@@ -1,37 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Formulario Autoescuela</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-        .formulario { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
-        h1 { text-align: center; }
-        label { font-weight: bold; display: block; margin-top: 10px; }
-        .dia { margin-bottom: 15px; }
-    </style>
+    <title>Formulario Disponibilidad</title>
 </head>
 <body>
-    <div class="formulario">
-        <h1>Disponibilidad Semanal</h1>
-        <form method="POST">
-            <label>Nombre:</label>
-            <input type="text" name="nombre" required>
-            <label>Teléfono:</label>
-            <input type="text" name="telefono" required>
+    <h1>Formulario de Disponibilidad</h1>
+    <form method="post">
+        <label>Nombre: <input type="text" name="nombre" required></label><br>
+        <label>Teléfono: <input type="tel" name="telefono" required></label><br><br>
 
-            {% for dia in dias %}
-                <div class="dia">
-                    <label>{{ dia }}:</label>
-                    {% for hora in horas %}
-                        <label>
-                            <input type="checkbox" name="{{ dia }}" value="{{ hora }}">
-                            {{ hora }}
-                        </label>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-            <button type="submit">Enviar</button>
-        </form>
-    </div>
+        {% for dia in dias %}
+            <fieldset>
+                <legend>{{ dia }}</legend>
+                {% for hora in horas %}
+                    <label><input type="checkbox" name="{{ dia }}" value="{{ hora }}"> {{ hora }}</label>
+                {% endfor %}
+            </fieldset>
+            <br>
+        {% endfor %}
+        <button type="submit">Enviar</button>
+    </form>
 </body>
 </html>
