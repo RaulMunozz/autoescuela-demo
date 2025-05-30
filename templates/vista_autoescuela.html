@@ -1,16 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Autoescuela</title>
+    <title>Vista Autoescuela</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+    </style>
 </head>
 <body>
-    <h2>Acceso Autoescuela</h2>
-    <form method="POST">
-        Usuario:<br>
-        <input type="text" name="usuario" required><br><br>
-        Contraseña:<br>
-        <input type="password" name="clave" required><br><br>
-        <button type="submit">Entrar</button>
-    </form>
+    <h2>Disponibilidad de los alumnos</h2>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Día</th>
+            <th>Horas</th>
+        </tr>
+        {% for r in registros %}
+            {% for dia, horas in r.disponibilidad.items() %}
+                <tr>
+                    <td>{{ r.nombre }}</td>
+                    <td>{{ r.telefono }}</td>
+                    <td>{{ dia }}</td>
+                    <td>{{ horas | join(', ') }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
 </body>
 </html>
