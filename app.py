@@ -1,21 +1,24 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///disponibilidad.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'supersecreto123'
 db = SQLAlchemy(app)
 
-# Crear la tabla al arrancar
-with app.app_context():
-    db.create_all()
+# Diccionario de usuarios autorizados
+usuarios = {
+    "admin": "clave123"
+}
 
-# Modelo
+# Modelo de base de datos
 class Disponibilidad(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
+    telefono = db.Column(db.String(20), nullable=False)
     dia = db.Column(db.String(20), nullable=False)
-    hora = db.Column(db.String(20), nullable=False)
+    horas = db.Column(db.String(200), nullable=False)  # varias horas como texto
 
 # Crear la tabla
 with app.app_context():
@@ -25,9 +28,13 @@ with app.app_context():
 def formulario():
     if request.method == 'POST':
         nombre = request.form['nombre']
+        telefono = request.form['telefono']
         dia = request.form['dia']
-        hora = request.form['hora']
-        nueva = Disponibilidad(nombre=nombre, dia=dia, hora=hora)
+        horas = request.form.getlist('horas')
+        if not (nombre and telefono and dia and horas):
+            return "Todos los campos son obligatorios", 400
+        horas_str = ', '.join(horas)
+        nueva = Disponibilidad(nombre=nombre, telefono=telefono, dia=dia, horas=horas_str)
         db.session.add(nueva)
         db.session.commit()
         return redirect('/gracias')
@@ -39,49 +46,18 @@ def gracias():
 
 @app.route('/autoescuela')
 def vista_autoescuela():
-    datos = Disponibilidad.query.order_by(Disponibilidad.dia, Disponibilidad.hora).all()
+    if 'usuario' not in session:
+        return redirect('/login')
+    datos = Disponibilidad.query.order_by(Disponibilidad.dia, Disponibilidad.horas).all()
     return render_template('vista_autoescuela.html', disponibilidad=datos)
 
-from flask import Flask, render_template, request, redirect
-from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///disponibilidad.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-# Modelo
-class Disponibilidad(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False)
-    dia = db.Column(db.String(20), nullable=False)
-    hora = db.Column(db.String(20), nullable=False)
-
-# Crear la tabla
-with app.app_context():
-    db.create_all()
-
-@app.route('/', methods=['GET', 'POST'])
-def formulario():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        dia = request.form['dia']
-        hora = request.form['hora']
-        nueva = Disponibilidad(nombre=nombre, dia=dia, hora=hora)
-        db.session.add(nueva)
-        db.session.commit()
-        return redirect('/gracias')
-    return render_template('formulario.html')
-
-@app.route('/gracias')
-def gracias():
-    return "¡Disponibilidad registrada correctamente! Gracias."
-
-@app.route('/autoescuela')
-def vista_autoescuela():
-    datos = Disponibilidad.query.order_by(Disponibilidad.dia, Disponibilidad.hora).all()
-    return render_template('vista_autoescuela.html', disponibilidad=datos)
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
+        usuario = request.form['usuario']
+        clave = request.form['clave']
+        if usuario in usuarios and usuarios[usuario] == clave:
+            session['usuario'] = usuario
+            return redirect('/autoescuela')
+        return "Credenciales incorrectas", 401
+    return render_template('login.html')

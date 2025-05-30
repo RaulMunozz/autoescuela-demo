@@ -4,18 +4,20 @@
     <title>Vista Autoescuela</title>
 </head>
 <body>
-    <h2>Disponibilidad Recibida</h2>
+    <h2>Disponibilidad de los alumnos</h2>
     <table border="1">
         <tr>
             <th>Nombre</th>
+            <th>Teléfono</th>
             <th>Día</th>
-            <th>Hora</th>
+            <th>Horas</th>
         </tr>
         {% for fila in disponibilidad %}
         <tr>
             <td>{{ fila.nombre }}</td>
+            <td>{{ fila.telefono }}</td>
             <td>{{ fila.dia }}</td>
-            <td>{{ fila.hora }}</td>
+            <td>{{ fila.horas }}</td>
         </tr>
         {% endfor %}
     </table>

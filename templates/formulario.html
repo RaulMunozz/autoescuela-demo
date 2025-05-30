@@ -4,13 +4,17 @@
     <title>Formulario de Disponibilidad</title>
 </head>
 <body>
-    <h2>Indica tu disponibilidad semanal</h2>
+    <h2>Indica tu disponibilidad</h2>
     <form method="POST">
         Nombre:<br>
         <input type="text" name="nombre" required><br><br>
 
+        Teléfono:<br>
+        <input type="text" name="telefono" required><br><br>
+
         Día:<br>
         <select name="dia" required>
+            <option value="">--Selecciona un día--</option>
             <option value="Lunes">Lunes</option>
             <option value="Martes">Martes</option>
             <option value="Miércoles">Miércoles</option>
@@ -18,8 +22,8 @@
             <option value="Viernes">Viernes</option>
         </select><br><br>
 
-        Hora:<br>
-        <select name="hora" required>
+        Horas disponibles:<br>
+        <select name="horas" multiple required>
             <option value="09:00">09:00</option>
             <option value="10:00">10:00</option>
             <option value="11:00">11:00</option>
