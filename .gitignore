@@ -1,0 +1,6 @@
+instance/*.db
+instance/secret_key
+__pycache__/
+*.py[cod]
+.idea/
+.env
