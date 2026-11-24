@@ -6,8 +6,9 @@
 <body>
     <h1>Formulario de Disponibilidad</h1>
     <form method="post">
-        <label>Nombre: <input type="text" name="nombre" required></label><br>
-        <label>Teléfono: <input type="tel" name="telefono" required></label><br><br>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Nombre: <input type="text" name="nombre" required maxlength="100"></label><br>
+        <label>Teléfono: <input type="tel" name="telefono" required maxlength="20"></label><br><br>
 
         {% for dia in dias %}
             <fieldset>

@@ -12,7 +12,10 @@
 </head>
 <body>
     <h1>Tabla de Disponibilidad (Ordenada por Día)</h1>
-    <a href="/logout">Cerrar sesión</a>
+    <form method="post" action="/logout" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">Cerrar sesión</button>
+    </form>
     {% for dia, datos in horas_por_dia.items() %}
         <h2>{{ dia }}</h2>
         <table>
