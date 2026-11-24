@@ -4,6 +4,7 @@ import secrets
 import threading
 import time
 from collections import defaultdict
+from datetime import timedelta
 
 from flask import Flask, abort, make_response, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
@@ -19,6 +20,8 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
     SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE", "0") == "1",
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=2),
+    MAX_CONTENT_LENGTH=16 * 1024,
 )
 if app.config["SESSION_COOKIE_SECURE"]:
     app.config["SESSION_COOKIE_NAME"] = "__Host-session"
@@ -74,6 +77,8 @@ def harden_responses(resp):
         "default-src 'self'; base-uri 'none'; object-src 'none'; "
         "style-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'",
     )
+    if request.path == "/login" or session.get("logueado"):
+        resp.headers.setdefault("Cache-Control", "no-store")
     if os.environ.get("HSTS", "0") == "1":
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
     return resp
@@ -84,6 +89,9 @@ def login_rate_limited(key, limit=5, window_seconds=300):
     with _attempts_lock:
         recent = [t for t in _login_attempts[key] if now - t < window_seconds]
         _login_attempts[key] = recent
+        if len(_login_attempts) > 1000:
+            for ip in [k for k, value in _login_attempts.items() if not value]:
+                del _login_attempts[ip]
         if len(recent) >= limit:
             return True
         recent.append(now)
